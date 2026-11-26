@@ -325,7 +325,7 @@ textarea.code{width:100%;height:120px;font-size:11px;font-family:monospace;backg
     <span class="hearts" id="hearts"></span>
   </div>
   <div class="chips" id="chips"></div>
-  <div class="px homescene" id="homeScene" role="button" tabindex="0" aria-label="상태 보기"></div>
+  <div class="px homescene" id="homeScene" role="button" tabindex="0" aria-label="다음 말 듣기"></div>
   <div style="margin-top:10px">
     <button class="slot px" id="sl-hobby"></button>
     <button class="slot px" id="sl-night"></button>
@@ -931,15 +931,52 @@ $('b-start').onclick=()=>{
 
 /* ============ HOME ============ */
 function goHome(){show('s-home');renderHome()}
-const WISH={rest:{t:'쉬고 싶어',l:['오늘은 그냥 쉬고 싶어…','침대랑 한 몸 되고 싶다','이불 밖은 위험해']},
-  study:{t:'공부하고 싶어',l:['자격증 공부 좀 해볼까','뭔가 배우고 싶은 기분','나 요즘 너무 놀았나?']},
-  exercise:{t:'운동하고 싶어',l:['땀 좀 흘리고 싶다!','몸이 찌뿌둥해','오늘은 뛰고 싶어']},
-  friends:{t:'친구 보고 싶어',l:['애들 보고 싶어','수다 떨고 싶다','단톡방 너무 조용하네']},
-  date:{t:'설레고 싶어',l:['설레는 일 없나~','소개팅 들어온 거 없어?','누가 나 좀 데려가']},
-  travel:{t:'떠나고 싶어',l:['어디론가 떠나고 싶어','바다 보고 싶다','비행기 타고 싶어']},
-  shopping:{t:'쇼핑하고 싶어',l:['새 옷 사고 싶다','장바구니만 30개','방 좀 꾸미고 싶어']}};
-const DISL={date:{t:'남자 당분간 싫대',l:'남자 얘기 꺼내지도 마'},night:{t:'밤에 나가기 싫대',l:'오늘은 진짜 집에 갈래'}};
-const CHAT=['월요일 진짜 싫다','점심 뭐 먹지…','팀장님 또 회의래','출근 10분 차, 퇴근하고 싶다','오늘 뭐 입지','주말아 빨리 와라','커피 수혈이 필요해'];
+const WISH={
+  rest:{t:'쉬고 싶어',l:['오늘은 그냥 쉬고 싶어…','침대랑 한 몸 되고 싶다','이불 밖은 위험해','주말엔 아무 약속 없었으면','넷플릭스 정주행하고 싶다','낮잠 3시간 자고 싶어','폰 끄고 잠수 타고 싶다','배달 시켜서 누워서 먹고 싶어']},
+  study:{t:'공부하고 싶어',l:['자격증 공부 좀 해볼까','뭔가 배우고 싶은 기분','나 요즘 너무 놀았나?','회사에서 무시당하기 싫어','엑셀 고수가 되고 싶다','영어 좀 잘하고 싶어','이직하려면 스펙 쌓아야 하나','책 한 권은 읽어야지']},
+  exercise:{t:'운동하고 싶어',l:['땀 좀 흘리고 싶다!','몸이 찌뿌둥해','오늘은 뛰고 싶어','거북목 고쳐야 돼…','계단 오르다 숨찼어','운동복 사놓고 안 입었네','오운완 인증하고 싶다','체력이라도 키워야지']},
+  friends:{t:'친구 보고 싶어',l:['애들 보고 싶어','수다 떨고 싶다','단톡방 너무 조용하네','친구들이랑 맛집 가고 싶어','누가 나 좀 불러줘','요즘 친구들 뭐 하고 살지','깔깔 웃고 싶은 날','동기들이랑 퇴근 후 한잔?']},
+  date:{t:'설레고 싶어',l:['설레는 일 없나~','소개팅 들어온 거 없어?','누가 나 좀 데려가','연애 세포 다 죽은 듯','나도 커플 사진 찍고 싶다','주말에 데이트하는 사람들 부럽다','카톡 오는 사람이 엄마밖에 없어','썸이라도 타고 싶다']},
+  travel:{t:'떠나고 싶어',l:['어디론가 떠나고 싶어','바다 보고 싶다','비행기 타고 싶어','여권 만료됐나 확인해볼까','연차 쓰고 도망가고 싶다','호캉스라도 가고 싶어','아무도 날 모르는 곳으로','기차 타고 아무 데나']},
+  shopping:{t:'쇼핑하고 싶어',l:['새 옷 사고 싶다','장바구니만 30개','방 좀 꾸미고 싶어','월급 들어오면 지를 거야','입을 옷이 없어 (옷장 꽉 참)','택배 뜯는 맛으로 산다','향수 하나 새로 살까','플렉스 한 번 해보고 싶다']}};
+const DISL={date:{t:'남자 당분간 싫대',l:['남자 얘기 꺼내지도 마','소개팅? 당분간 사양할게','연애는 사치야 사치','남자는 이제 화면 속에서만']},
+  night:{t:'밤에 나가기 싫대',l:['오늘은 진짜 집에 갈래','회식 빠질 핑계 없나','밤에 나가면 나 죽어','칼퇴하고 바로 잘 거야']}};
+const CHAT=['월요일 진짜 싫다','점심 뭐 먹지…','팀장님 또 회의래','출근 10분 차, 퇴근하고 싶다','오늘 뭐 입지','주말아 빨리 와라','커피 수혈이 필요해','메일 답장 언제 하지','엑셀이 또 멈췄어','오늘 지하철 진짜 꽉 찼어','점심시간이 제일 좋아','퇴근까지 몇 시간 남았지?','택배 왔나 확인해야지','편의점 신상 먹어봐야지','머리 자를 때 됐다','오늘따라 거울 속 내가 괜찮네','알람 다섯 번 끄고 일어남','사직서는 마음속에만','월급은 통장을 스쳐 갈 뿐','회의 때 졸면 안 돼…','오늘 단톡방 왜 이렇게 시끄러워','나 요즘 좀 성장한 듯?','퇴근길 노을 예쁘다','아 맞다, 엄마한테 전화해야지','인생 2회차였으면 좋겠다','오늘 저녁은 떡볶이다','금요일은 왜 이렇게 느리게 와','부장님 아재개그 또 들었어','하늘 보니까 기분 좋다','다이어트는 내일부터','통장 잔고 보기 무섭다','나 오늘 좀 귀여운 듯','회사 앞 카페 신메뉴 나왔대','점심 먹고 너무 졸려','유튜브 알고리즘이 날 너무 잘 알아','청소해야 하는데…','빨래 돌려놓고 까먹음','회사 엘리베이터 왜 이렇게 안 와','오늘 운세 좋대!','야근은 싫어 진짜로'];
+const SEASON={1:['새해 목표 세워야지','올해는 진짜 다를 거야','떡국 먹었으니 한 살 더…','연말정산 뭐부터 하지'],2:['아직도 춥다','발렌타인데이 줄 사람 없음','설날에 친척들이 연애 물어봄','봄옷 미리 사둘까'],3:['봄이다 봄!','미세먼지 진짜 싫어','새 학기 느낌 나서 설레','벚꽃 언제 피지'],4:['벚꽃 구경 가고 싶어','봄바람 불면 연애하고 싶어져','꽃가루 알레르기…','4월은 왜 이렇게 바빠'],5:['연휴 언제야?','어버이날 선물 뭐 하지','날씨 좋아서 출근이 아깝다','5월은 돈 나갈 일 투성이'],6:['벌써 반년 지났어?','장마 시작되나','여름휴가 계획 세워야지','에어컨 틀까 말까'],7:['더워서 녹을 것 같아','휴가까지 버티자','수박 먹고 싶다','바다 가고 싶다…'],8:['회사 에어컨이 너무 세','휴가 끝나니 출근이 더 싫어','모기 때문에 잠 못 잤어','여름밤 맥주 최고'],9:['가을 냄새 난다','추석에 또 연애 질문 받겠지','하늘이 높아졌어','트렌치코트 꺼낼 때다'],10:['단풍 보러 가고 싶다','가을 타나 봐…','핼러윈 코스튬 뭐 하지','가을엔 연애해야 한다던데'],11:['벌써 패딩 입어야 하나','빼빼로데이 아무 일 없음','올해 뭐 했지 나…','붕어빵 파는 데 어디야'],12:['크리스마스 약속 없으면 어쩌지','연말 모임 너무 많아','올해도 고생했다 나','눈 오면 좋겠다']};
+const RECENT={good:['어제 일 생각하면 자꾸 웃음 나','폰만 계속 보게 돼'],bad:['그 사람 생각하면 아직도 어이없어','남자 보는 눈 키워야겠다'],reject:['거절하길 잘했어','내 촉은 틀리지 않아'],ghost:['읽씹은 진짜 너무하잖아','연락 기다리는 거 지쳤어'],sick:['아직 목이 칼칼해','건강이 최고다 진짜'],savings:['적금 만기의 맛… 최고야','또 적금 들까?'],bonus:['성과급 들어온 거 아직도 신기해'],cardbomb:['카드값 보고 정신 차렸어'],couple:['나 남친 생겼다고!!','연애 시작하니까 세상이 핑크야'],busted:['그날 일은 묻어두자…'],trip:['여행 사진 정리해야지','여행 다녀오니까 출근 더 싫다']};
+function ctxLines(){
+  const s=S.st,L=[],add=(c,a)=>{if(c)L.push(...a)};
+  add(s.hp<25,['피곤해 죽겠다','눈 뜨기가 힘들어','몸이 천근만근','오늘 반차 쓰고 싶다']);
+  add(s.hp>=85,['오늘 컨디션 최고!','에너지 넘친다','뭐든 할 수 있을 것 같아']);
+  add(s.mood<25,['아무것도 하기 싫어…','다 귀찮아','나 왜 이렇게 사는 거지','그냥 누워만 있고 싶어']);
+  add(s.mood>=80,['요즘 왜 이렇게 기분 좋지?','인생 살 만하다!','콧노래가 절로 나와']);
+  add(s.nam<10,['연애? 회사가 먼저지','남자보다 월급이 좋아','혼자가 편해']);
+  add(s.nam>=20&&s.nam<45,['연애… 해볼까?','요즘 좀 외로운 듯','커플 보면 살짝 부럽다']);
+  add(s.nam>=45&&s.nam<75,['소개팅 앱 깔아볼까','주말에 약속 없는 거 실화?','설레고 싶다 진짜로']);
+  add(s.nam>=75,['오늘 소개팅 없어?','남자 많은 모임 어디 없나','잘생긴 사람 보면 심장이…','나 오늘 예쁘지? 예쁘다고 해']);
+  add(s.int>=60,['자격증 하나 더 딸까','요즘 머리가 잘 돌아가','회의에서 내 말이 먹혔어']);
+  add(s.rep>=75,['팀장님이 날 좀 믿는 눈치','승진 각인가?','나 회사에서 좀 인정받는 듯']);
+  add(s.rep<25,['회사에서 눈치 보여…','팀장님 표정이 안 좋아','이러다 잘리는 거 아니야?']);
+  add(s.friend<25,['친구들이 연락이 없네','단톡방에서 나만 빼고 노나?','나 요즘 친구들한테 너무했나']);
+  add(s.friend>=80,['우리 단톡방 최고','친구들 없으면 못 살아']);
+  add(s.charm>=70,['요즘 예뻐졌다는 말 자주 들어','거울 볼 맛 난다']);
+  add(S.cash<30,['통장이 텅장이야','이번 달 라면만 먹어야 해','월급날 언제 와…']);
+  add(S.cash>=500,['통장 보면 든든해','나 생각보다 부자일지도?']);
+  add((S.bank.card&&S.bank.card.bill)||S.bank.loan.bal,['카드값 무섭다','할부는 미래의 내가…']);
+  add(S.bank.lateMonths,['은행에서 또 전화 왔어','연체 문자 그만 와…']);
+  add(S.bank.sav.length,['적금 만기까지 버티자','적금 깨고 싶다… 참자']);
+  add(S.leave<=3,['연차가 거의 없어','이제 아프면 안 돼']);
+  add(S.sick===0,['병가 다 썼어… 건강하자']);
+  if(S.bf){const b=S.bf.m.name;add(1,[`${b}한테 연락 왔나?`,`${b}이랑 주말에 뭐 하지`,'연애하니까 출근도 할 만해',`${b} 생각만 해도 웃음 나`])}
+  add(S.nodate>0,['남자는 이제 됐어','연애 프로나 볼래']);
+  add(S.wear==='pink',['오늘 핑크 너무 과했나?']);add(S.wear==='track',['이 트레이닝복 편하긴 해']);add(S.wear==='suit',['정장 입으니까 일 잘하는 사람 같아']);add(S.wear==='tweed',['이 원피스 입으면 기분 좋아']);add(S.wear==='cozy',['수면바지는 진리야']);
+  add(S.furn.bed==='b2',['캐노피 침대 너무 공주 같아']);add(S.furn.light==='l2',['네온사인 켜면 분위기 미쳤다']);add(S.furn.plant,['몬스테라 물 줘야지']);add(S.furn.desk==='d2',['RGB 책상 앉으면 일 잘될 것 같아']);
+  add(S.month<=3,['아직도 회사 화장실 헷갈려','신입이라 다들 친절해','사원증 아직도 어색해']);
+  add(S.month>=13,['이제 나도 2년 차다','신입 들어오면 잘해줘야지']);
+  (S.recent||[]).forEach(t=>{if(t.startsWith('trip:'))L.push(`${t.slice(5)} 또 가고 싶다`,...RECENT.trip);else if(RECENT[t])L.push(...RECENT[t])});
+  return L;
+}
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function newWish(){
   const s=S.st,w={rest:1+(s.hp<45?3:0)+(s.mood<40?1:0),study:1+(s.int<40?1:0),exercise:1,friends:1+(s.friend<40?2:0),date:S.nodate>0?0:(s.nam>=20?2:.4)+(S.bf?1:0),travel:.6,shopping:.7};
   const pw=()=>{let t=0;for(const k in w)t+=w[k];let x=rnd()*t;for(const k in w){x-=w[k];if(x<=0)return k}return 'rest'};
@@ -956,9 +993,17 @@ function wishOK(){
 function wtag(ws,dis){let h='';if(ws.some(w=>S.wish.includes(w)))h+='<span class="wtag">💭 원해요</span>';if(dis&&(S.dis||[]).includes(dis))h+='<span class="wtag no">😒 싫대요</span>';return h}
 const moodMult=()=>{const m=S.st.mood;return m>=70?1.2:m>=40?1:m>=20?.8:.6};
 let bubT=null,bubI=0,bubL=[];
-function bubLines(){const a=S.wish.map(w=>pick(WISH[w].l)),d=(S.dis||[]).map(x=>DISL[x].l);return [a[0],homeLine(),a[1],pick(CHAT),...d,pick(CHAT)].filter(Boolean)}
+function bubLines(){
+  const wl=shuffle(S.wish.flatMap(w=>shuffle(WISH[w].l.slice()).slice(0,3)).concat((S.dis||[]).flatMap(d=>DISL[d].l.slice(0,2))));
+  const mm=((S.month-1)%12)+1;
+  const other=shuffle(ctxLines().concat(shuffle(SEASON[mm].slice()).slice(0,3),shuffle(CHAT.slice()).slice(0,10)));
+  const seen=new Set(),out=[];let a=0,b=0;
+  while(a<wl.length||b<other.length){const x=(out.length%2===0&&a<wl.length)?wl[a++]:(b<other.length?other[b++]:wl[a++]);if(x&&!seen.has(x)){seen.add(x);out.push(x)}}
+  return out;
+}
 function setBub(t){const b=document.querySelector('#homeScene .hbub');if(!b)return;b.textContent=t;b.classList.remove('pop-in');void b.offsetWidth;b.classList.add('pop-in')}
-function startBubble(){clearInterval(bubT);bubL=bubLines();bubI=0;setBub(bubL[0]);bubT=setInterval(()=>{if(!$('s-home').classList.contains('on'))return;bubI=(bubI+1)%bubL.length;setBub(bubL[bubI])},15000)}
+function nextBub(){bubI++;if(bubI>=bubL.length){bubL=bubLines();bubI=0}setBub(bubL[bubI])}
+function startBubble(){clearInterval(bubT);bubL=bubLines();bubI=0;setBub(bubL[0]);bubT=setInterval(()=>{if(!$('s-home').classList.contains('on'))return;nextBub()},15000)}
 function renderHome(){
   $('cashChip').innerHTML=`💰 ${S.cash}만`;
   const hcount=Math.ceil(S.st.hp/20);$('hearts').innerHTML=[0,1,2,3,4].map(i=>heartSVG(i<hcount)).join('');
@@ -988,7 +1033,7 @@ function homeLine(){const s=S.st;
   if(s.int>=60)return '자격증 하나 더 딸까';
   return '연애? 회사가 먼저지';}
 function planCost(){const p=S.plan;let c=p.nights*NIGHT;if(p.hobby)c+=HOBBY[p.hobby].cost;p.week.forEach(w=>c+=WEEK[w].cost);if(p.trip)c+=tripPrice(p.trip.dest,TRIPLEN[p.trip.len].d);return c}
-$('homeScene').onclick=openStats;$('homeScene').onkeydown=e=>{if(e.key==='Enter')openStats()};
+$('homeScene').onclick=()=>{nextBub();clearInterval(bubT);bubT=setInterval(()=>{if($('s-home').classList.contains('on'))nextBub()},15000)};$('homeScene').onkeydown=e=>{if(e.key==='Enter')$('homeScene').onclick()};
 
 /* ---------- plan popups ---------- */
 $('sl-hobby').onclick=()=>{
@@ -1195,7 +1240,7 @@ function portraitHTML(m){return `<div class="ptr" style="--bgc:${m.bg}"><svg cla
 function runMonth(){
   const p=S.plan,d={},cards=[],lines=[];const before=Object.assign({},S.st),cash0=S.cash;
   const push=(id,fx,pr,extra)=>{if(fx)addFx(d,fx);cards.push({id,fx,pr,extra})};
-  let quit=false;
+  let quit=false;S.recent=[];
   const W=wishOK(),mult=moodMult()*(1+.15*W.hit.length)*(W.bad.length?.7:1);
   const sc=fx=>{const o={};for(const k in fx)o[k]=fx[k]>0&&k!=='mood'?Math.round(fx[k]*mult):fx[k];return o};
   if(W.hit.length){const fx={mood:10*W.hit.length};addFx(d,fx);lines.push([`💭 소원 들어줌 (${W.hit.map(w=>WISH[w].t).join(', ')})`,fx])}
@@ -1217,14 +1262,14 @@ function runMonth(){
   if(sickDays){
     const used=[];for(let i=0;i<sickDays;i++){if(S.sick>0){S.sick--;used.push('병가')}else if(S.leave>0){S.leave--;used.push('연차')}else{quit=true}}
     const fx={rep:-3*sickDays,hp:5};push('hang',fx,1,{d:`앓아누워서 ${used.length?used.join(', ')+' 사용':'쉴 날이 없다'}. 목소리는 진짜 아팠다.`});
-    lines.push([`🤒 앓아누움 ${sickDays}일`,fx]);
+    lines.push([`🤒 앓아누움 ${sickDays}일`,fx]);S.recent.push('sick');
   }
   // weekend
   let blind=false;
   p.week.forEach(k=>{const w=WEEK[k],wf=sc(w.fx);addFx(d,wf);lines.push([`${w.e} ${w.n}`,wf]);if(k==='blind')blind=true;else if(rnd()<.7)push(w.card,null,5)});
   // boyfriend
   if(S.bf){const fx={nam:3,mood:4};addFx(d,fx);S.cash-=5;lines.push([`💑 ${S.bf.m.name}이랑 데이트 (5만)`,fx]);
-    if(blind){blind=false;const bf=S.bf;S.bf=null;S.nodate=2;push('busted',{mood:-15,friend:-4},0,{m:bf.m.name});lines.push(['💔 남친한테 소개팅 들킴',{mood:-15}])}}
+    if(blind){blind=false;const bf=S.bf;S.bf=null;S.nodate=2;push('busted',{mood:-15,friend:-4},0,{m:bf.m.name});lines.push(['💔 남친한테 소개팅 들킴',{mood:-15}]);S.recent.push('busted')}}
   // trip
   let tripMeet=0;
   if(p.trip){
@@ -1232,7 +1277,7 @@ function runMonth(){
     if(L.leave>S.leave){quit=true;S.leave=0}else S.leave-=L.leave;
     const fx=sc({hp:6+L.d*2,nam:t.nam+L.d,charm:2,friend:2,mood:8});addFx(d,fx);lines.push([`✈️ ${t.n} ${L.n}`,fx]);
     if(t.zone!=='국내'&&!S.dex.includes('airport'))push('airport',null,2);
-    push('t_'+p.trip.dest,null,1);
+    push('t_'+p.trip.dest,null,1);S.recent.push('trip:'+t.n);
     tripMeet=t.zone==='국내'?.15:.3;
   }
   // meetings → interactive
@@ -1305,7 +1350,7 @@ function dateResolve(c,choice){
   }else if(choice==='reject'){card='reject';res='거절';fx={mood:m.type==='good'?0:8};ex.d=m.type!=='good'?`“좋은 분 만나세요.” 나중에 들어보니 ${BADDESC[m.type]}. 촉 좋다!`:'좋은 사람 같긴 했는데… 마음이 안 갔다.';ex.bg=v.bg;ex.tb=v.tb}
   else if(choice==='skip'){card='noafter';fx={mood:-5};res='흐지부지'}
   for(const k in fx)S.st[k]=cl(S.st[k]+fx[k]);
-  M.lines.push([`💘 ${m.name} (${res})`,fx]);
+  M.lines.push([`💘 ${m.name} (${res})`,fx]);S.recent=S.recent||[];S.recent.push({사귐:'couple',썸:'good','잘못된 남자':'bad',거절:'reject',읽씹:'ghost'}[res]||'ghost');
   S.men.push({m,res,mo:S.month});if(S.men.length>40)S.men.shift();
   if(!S.dex.includes(card))S.dex.push(card);
   queue.splice(qi+1,0,{id:card,fx,extra:ex});
@@ -1316,17 +1361,17 @@ function payday(){
   const sal=SALARY();S.cash+=sal;lines.push(['💼 월급',sal]);
   S.cash-=LIVING;lines.push(['🏠 월세·생활비',-LIVING]);
   const mm=((S.month-1)%12)+1;
-  if(mm===12&&S.st.rep>=70){S.cash+=100;lines.push(['🎉 성과급',100]);cards.push({id:'bonus'})}
+  if(mm===12&&S.st.rep>=70){S.cash+=100;lines.push(['🎉 성과급',100]);S.recent.push('bonus');cards.push({id:'bonus'})}
   // savings
   for(let i=B.sav.length-1;i>=0;i--){const s=B.sav[i];
     if(S.cash>=s.amt){S.cash-=s.amt;s.bal+=s.amt;s.paid++;lines.push([`🐷 적금 ${s.m}개월`,-s.amt]);
-      if(s.paid>=s.m){const out=Math.round(s.bal*(1+s.rate));S.cash+=out;B.sav.splice(i,1);B.matured++;lines.push(['🎉 적금 만기!',out]);cards.push({id:'savings',extra:{d:`${s.m}개월 동안 모은 ${s.bal}만원이 이자 붙어서 ${out}만원으로 돌아왔다!`}})}}
+      if(s.paid>=s.m){const out=Math.round(s.bal*(1+s.rate));S.cash+=out;B.sav.splice(i,1);B.matured++;lines.push(['🎉 적금 만기!',out]);S.recent.push('savings');cards.push({id:'savings',extra:{d:`${s.m}개월 동안 모은 ${s.bal}만원이 이자 붙어서 ${out}만원으로 돌아왔다!`}})}}
     else{S.cash+=s.bal;B.sav.splice(i,1);lines.push(['😢 돈이 모자라 적금 자동 해지',s.bal])}}
   for(let i=B.dep.length-1;i>=0;i--){const dp=B.dep[i];dp.left--;if(dp.left<=0){const out=Math.round(dp.amt*(1+dp.rate));S.cash+=out;B.dep.splice(i,1);B.matured++;lines.push(['🎉 예금 만기!',out])}}
   // card & loan
   let late=false;
   if(B.card&&B.card.bill){const bill=B.card.bill;const paid=Math.min(bill,Math.max(0,S.cash));S.cash-=paid;const rest=bill-paid;B.card.bill=rest?Math.round(rest*1.2):0;lines.push(['💳 카드값',-paid]);
-    if(rest){late=true;lines.push(['⚠️ 카드값 연체 (이자 20%)',0])}else if(bill>=150)cards.push({id:'cardbomb'})}
+    if(rest){late=true;lines.push(['⚠️ 카드값 연체 (이자 20%)',0])}else if(bill>=150){cards.push({id:'cardbomb'});S.recent.push('cardbomb')}}
   if(B.loan.bal){const due=Math.min(B.loan.pay,B.loan.bal);if(S.cash>=due){S.cash-=due;B.loan.bal-=due;lines.push(['🏦 대출 상환',-due]);if(!B.loan.bal)B.loan.pay=0}else{late=true;B.loan.bal=Math.round(B.loan.bal*1.05);lines.push(['⚠️ 대출 연체',0])}}
   if(S.loanCard){S.loanCard=false;cards.unshift({id:'loan'})}
   if(late){B.lateMonths++;S.credit=cl(S.credit-60,300,900);cards.push({id:'late',extra:{d:`연체 ${B.lateMonths}개월째. 3개월 넘으면 큰일 난다.`}})}
